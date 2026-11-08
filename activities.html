@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>활동 카드 | 정보 수업 나눔 키트</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232f5bea'/><text x='50' y='68' font-size='56' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>정</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="container">
+  <section class="hero">
+    <span class="eyebrow">골라 쓰는 퍼실리테이션</span>
+    <h1>활동 카드 12</h1>
+    <p class="lead">연수 상황과 남은 시간에 맞춰 골라 쓰세요. <span class="tag accent">AI</span> 표시는 생성형 AI를 활용하는 최신 트렌드 활동입니다.</p>
+  </section>
+
+  <div class="chips" role="group" aria-label="단계 필터" id="filters"></div>
+  <div class="grid cols-2" id="cards"></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script>
+const PHASES = ["전체", "체크인", "꺼내기", "만들기", "다듬기", "나누기", "체크아웃", "AI 활용"];
+
+const ACTIVITIES = [
+  {
+    title: "한 단어 체크인", emoji: "🔤", phase: "체크인", time: "7분", group: "모둠", ai: false,
+    why: "모두가 첫 10분 안에 한 번씩 말하게 해 참여의 문턱을 낮춥니다.",
+    steps: ["연수 실습 중 ‘우리 반에서 해 보고 싶다’ 싶었던 순간을 한 단어로 포스트잇에 쓰기", "모둠에서 단어 + 이유 한 문장씩 돌아가며 말하기", "포스트잇을 키워드 벽(또는 패들렛)에 모으기"],
+    tip: "멘티미터 워드클라우드로 받으면 많이 나온 단어가 크게 보여 오프닝 분위기가 살아납니다."
+  },
+  {
+    title: "1분 바이브 코딩 오프닝 시연", emoji: "⚡", phase: "체크인", time: "5분", group: "전체", ai: true,
+    why: "‘나도 할 수 있겠다’는 기대감을 만드는 강렬한 첫 장면입니다.",
+    steps: ["진행자가 AI 채팅창에 수업 도구를 말로 요청 (예: 이진수 변환 퀴즈)", "완성된 앱을 화면에서 바로 실행", "“코드 한 줄도 쓰지 않았습니다”로 마무리"],
+    tip: "현장에서 실패할 수 있으니 미리 만든 결과물을 백업 탭에 열어 두세요."
+  },
+  {
+    title: "1-2-4-All", emoji: "🧩", phase: "꺼내기", time: "15분", group: "혼자→짝→모둠→전체", ai: false,
+    why: "말 많은 몇 명이 아닌 모든 사람의 생각을 끌어내는 대표적인 리버레이팅 스트럭처입니다.",
+    steps: ["1: 혼자 3분, 적용 아이디어 메모", "2: 짝과 4분, 설명하고 질문 하나 받기", "4: 모둠 5분, ‘이렇게 더하면’ 보태기", "All: 모둠별 대표 아이디어 15초 소개"],
+    tip: "짝 단계에서 질문을 하나로 고정해 주면 평가 분위기가 사라집니다."
+  },
+  {
+    title: "실습 → 우리 교실 브릿지", emoji: "🌉", phase: "꺼내기", time: "10분", group: "혼자", ai: false,
+    why: "연수 실습을 그대로가 아니라 ‘우리 학생 수준’으로 옮기는 생각의 다리를 놓습니다.",
+    steps: ["왼쪽 칸: 연수에서 한 실습", "가운데 칸: 우리 학생들의 특징 (수준, 관심사, 환경)", "오른쪽 칸: 그래서 이렇게 바꾼다"],
+    tip: "활동지 한 장 설계 양식의 윗부분으로 바로 이어집니다."
+  },
+  {
+    title: "바이브 코딩 챌린지", emoji: "💻", phase: "만들기", time: "35분", group: "혼자 + 버디", ai: true,
+    why: "코드를 몰라도 AI와 대화하며 ‘우리 반 전용’ 수업 도구를 만드는 최신 트렌드 활동입니다.",
+    steps: ["아이디어 카드나 내 아이디어로 만들 도구 정하기", "프롬프트 템플릿으로 첫 요청", "실행해 보고 ‘이 부분을 이렇게 바꿔 줘’로 2~3번 수정", "공유 링크나 캡처를 패들렛에 올리기"],
+    tip: "막히면 옆 사람에게 먼저 묻는 버디제를 쓰면 진행자 두 명으로도 30명이 충분히 돌아갑니다."
+  },
+  {
+    title: "한 장 활동 설계", emoji: "📝", phase: "만들기", time: "35분", group: "혼자", ai: false,
+    why: "AI가 부담스러운 분도 편하게 참여할 수 있는 트랙입니다.",
+    steps: ["한 장 설계 양식 채우기 (단원, 학생 활동 3단계, 준비물, 포인트)", "필요하면 AI로 활동지 초안이나 루브릭 만들기", "사진을 찍어 패들렛에 올리기"],
+    tip: "‘지도안’이 아니라 ‘동료에게 소개하는 한 장’이라고 안내하세요."
+  },
+  {
+    title: "AI 학생 리허설", emoji: "🎭", phase: "다듬기", time: "8분", group: "혼자", ai: true,
+    why: "수업 전에 예상 오개념과 질문을 미리 만나 보는 ‘아하’ 순간을 만듭니다.",
+    steps: ["AI에게 고1 학생 역할 부여 (수준·성향 지정)", "내 활동지나 앱을 풀어 보게 하기", "헷갈려 한 지점 1곳만 수정"],
+    tip: "‘잘하는 학생’과 ‘처음 배우는 학생’ 두 페르소나를 비교해 보면 더 효과적입니다."
+  },
+  {
+    title: "짝 리믹스 릴레이", emoji: "🔁", phase: "다듬기", time: "7분", group: "짝", ai: true,
+    why: "내 아이디어가 동료 손에서 진화하는 경험으로 협업의 가치를 체감합니다.",
+    steps: ["짝과 산출물 교환", "세 가지 중 하나로 변형 제안: 난이도 낮추기 · 언플러그드 · 다른 단원 융합", "AI로 변형 버전을 빠르게 만들어 보여 주기 (선택)"],
+    tip: "변형 버전은 원작 게시물의 댓글로 달면 자료집이 더 풍성해집니다."
+  },
+  {
+    title: "디지털 갤러리 워크", emoji: "🖼️", phase: "나누기", time: "15분", group: "전체", ai: false,
+    why: "발표 부담 없이 30개 산출물을 모두 공유하는 가장 효율적인 방법입니다.",
+    steps: ["패들렛을 둘러보며 하트(공감) 최대 3개", "댓글 말머리: 🙌 가져갈게요 / 💡 이렇게 더하면 / ❓ 궁금해요", "자기 게시물로 돌아와 댓글 읽기"],
+    tip: "오프라인이라면 산출물을 벽에 붙이고 원형 스티커와 3색 포스트잇으로 똑같이 운영할 수 있습니다."
+  },
+  {
+    title: "하이라이트 3 인터뷰", emoji: "🏆", phase: "나누기", time: "5분", group: "전체", ai: false,
+    why: "동료가 고른 아이디어를 축하하며 연수의 절정을 만듭니다.",
+    steps: ["공감을 가장 많이 받은 3개를 화면에 띄우기", "작성자에게 30초 인터뷰", "‘올해의 수업 도구상’ 같은 이름으로 박수 (작은 선물이 있으면 더 좋음)"],
+    tip: "순위보다 ‘가져갈게요’ 댓글 수를 기준으로 하면 경쟁보다 나눔의 분위기가 됩니다."
+  },
+  {
+    title: "What? So what? Now what?", emoji: "🔍", phase: "체크아웃", time: "8분", group: "혼자→모둠", ai: false,
+    why: "경험을 의미와 실행 계획으로 연결하는 성찰 구조입니다.",
+    steps: ["What: 오늘 무엇을 경험했나?", "So what: 그게 나와 우리 학생에게 왜 의미 있나?", "Now what: 그래서 다음 학기에 무엇을 할까?"],
+    tip: "시간이 부족하면 Now what 한 줄만 써도 충분합니다."
+  },
+  {
+    title: "나와의 약속 · 미래의 나에게", emoji: "💌", phase: "체크아웃", time: "6분", group: "모둠", ai: false,
+    why: "연수가 끝난 뒤에도 실천으로 이어지게 하는 장치입니다.",
+    steps: ["“다음 학기 ○월에, 저는 ○○ 수업에서 ○○을 해 보겠습니다.” 한 문장을 모둠에서 말하기", "패들렛 ‘나의 약속’ 열에 올리기", "실천 약속 카드에 한 달 뒤 나에게 한 줄 쓰기 → 한 달 뒤 단톡방이나 메일로 전송"],
+    tip: "AI 윤리 딜레마(예: 학생이 AI로 만든 코드를 과제로 냈다면?)를 1분 손들기 투표로 덧붙이면 다음 연수 주제도 자연스럽게 모입니다."
+  },
+];
+
+const filters = document.getElementById("filters");
+const cards = document.getElementById("cards");
+let current = "전체";
+
+function render() {
+  filters.innerHTML = PHASES.map(p =>
+    `<button class="chip" aria-pressed="${p === current}" data-p="${p}">${p}</button>`).join("");
+  const list = ACTIVITIES.filter(a =>
+    current === "전체" ? true : current === "AI 활용" ? a.ai : a.phase === current);
+  cards.innerHTML = list.map(a => `
+    <article class="card activity">
+      <span class="emoji">${a.emoji}</span>
+      <h3>${a.title}</h3>
+      <div class="meta">
+        <span class="tag brand">${a.phase}</span>
+        <span class="tag">⏱ ${a.time}</span>
+        <span class="tag">👥 ${a.group}</span>
+        ${a.ai ? '<span class="tag accent">AI</span>' : ""}
+      </div>
+      <p class="muted">${a.why}</p>
+      <ol>${a.steps.map(s => `<li>${s}</li>`).join("")}</ol>
+      <details><summary>진행 팁</summary><p class="small">${a.tip}</p></details>
+    </article>`).join("");
+}
+filters.addEventListener("click", e => {
+  const p = e.target.dataset.p;
+  if (p) { current = p; render(); }
+});
+render();
+</script>
+</body>
+</html>

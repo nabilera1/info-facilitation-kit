@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>진행 도구 | 정보 수업 나눔 키트</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232f5bea'/><text x='50' y='68' font-size='56' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>정</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="container">
+  <section class="hero">
+    <span class="eyebrow">화면에 띄워 쓰는</span>
+    <h1>진행 도구</h1>
+    <p class="lead">타이머, 모둠 편성, 랜덤 발표자 뽑기. 인터넷이 끊겨도 페이지만 열려 있으면 동작합니다.</p>
+    <nav class="toc"><a href="#timer">⏱ 타이머</a><a href="#groups">👥 모둠 편성</a><a href="#picker">🎲 발표자 뽑기</a></nav>
+  </section>
+
+  <section id="timer" class="card">
+    <div class="section-head"><h2 style="margin-top:0">⏱ 활동 타이머</h2><button class="btn small" id="fs">전체 화면</button></div>
+    <p class="muted small" id="timer-label">단계를 고르거나 분을 입력하세요.</p>
+    <div class="btn-row" id="presets"></div>
+    <div class="timer-display" id="display">05:00</div>
+    <div class="btn-row">
+      <input type="number" id="custom" min="1" max="120" value="5" aria-label="분">
+      <button class="btn" id="set">분 설정</button>
+      <button class="btn primary" id="start">시작</button>
+      <button class="btn" id="pause">일시정지</button>
+      <button class="btn" id="reset">다시</button>
+      <button class="btn" id="plus">+1분</button>
+    </div>
+    <p class="muted small" style="text-align:center;margin-top:12px">1분 남으면 주황색, 끝나면 알림음이 울립니다. 단축키: <kbd>Space</kbd> 시작/정지</p>
+  </section>
+
+  <section id="groups" class="card" style="margin-top:24px">
+    <h2 style="margin-top:0">👥 모둠 편성</h2>
+    <p class="muted small">이름을 한 줄에 한 명씩 붙여 넣으세요. 비워 두면 1번~30번으로 편성합니다. 같은 학교 선생님이 한 모둠에 몰리지 않게 섞을 때 유용합니다.</p>
+    <textarea id="names" rows="5" placeholder="김정보&#10;이데이터&#10;박알고"></textarea>
+    <div class="btn-row" style="justify-content:flex-start;margin-top:10px;align-items:center">
+      <label for="gcount">모둠 수</label>
+      <input type="number" id="gcount" min="2" max="15" value="6">
+      <button class="btn primary" id="make">섞어서 편성</button>
+    </div>
+    <div class="groups" id="group-out"></div>
+  </section>
+
+  <section id="picker" class="card" style="margin-top:24px">
+    <h2 style="margin-top:0">🎲 발표자 · 모둠 뽑기</h2>
+    <p class="muted small">위 이름 목록을 사용합니다. 비어 있으면 1모둠~6모둠 중에서 뽑습니다. 한 번 뽑힌 사람은 다시 뽑히지 않습니다.</p>
+    <div class="picked" id="picked">?</div>
+    <div class="btn-row"><button class="btn primary" id="pick">뽑기</button><button class="btn" id="pick-reset">처음부터</button></div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script>
+/* ---------- 타이머 ---------- */
+const PRESETS = [["체크인", 7], ["1 혼자", 3], ["2 짝", 4], ["4 모둠", 5], ["만들기", 35], ["휴식", 10], ["리허설", 8], ["갤러리", 12], ["약속", 4]];
+let total = 300, left = 300, timerId = null;
+const display = document.getElementById("display");
+const label = document.getElementById("timer-label");
+
+document.getElementById("presets").innerHTML = PRESETS.map(([n, m]) =>
+  `<button class="chip" data-min="${m}" data-name="${n}">${n} ${m}′</button>`).join("");
+document.getElementById("presets").addEventListener("click", e => {
+  const m = e.target.dataset.min;
+  if (m) { setMinutes(+m); label.textContent = `${e.target.dataset.name} · ${m}분`; }
+});
+
+function fmt(s) { const m = Math.floor(s / 60), r = s % 60; return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`; }
+function draw() {
+  display.textContent = fmt(left);
+  display.classList.toggle("warn", left > 0 && left <= 60);
+  display.classList.toggle("done", left === 0);
+  document.title = timerId ? `${fmt(left)} · 타이머` : "진행 도구 | 정보 수업 나눔 키트";
+}
+function setMinutes(m) { stop(); total = left = Math.round(m * 60); draw(); }
+function stop() { clearInterval(timerId); timerId = null; draw(); }
+function start() {
+  if (timerId || left === 0) return;
+  timerId = setInterval(() => {
+    left = Math.max(0, left - 1);
+    if (left === 0) { stop(); beep(); }
+    draw();
+  }, 1000);
+  draw();
+}
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, .35, .7].forEach(t => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(.25, ctx.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + t + .3);
+      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .3);
+    });
+  } catch (e) {}
+}
+document.getElementById("start").onclick = start;
+document.getElementById("pause").onclick = stop;
+document.getElementById("reset").onclick = () => { stop(); left = total; draw(); };
+document.getElementById("plus").onclick = () => { left += 60; total = Math.max(total, left); draw(); };
+document.getElementById("set").onclick = () => { const v = +document.getElementById("custom").value; if (v > 0) { setMinutes(v); label.textContent = `${v}분`; } };
+document.getElementById("fs").onclick = () => {
+  const el = document.getElementById("timer");
+  if (document.fullscreenElement) document.exitFullscreen(); else el.requestFullscreen?.();
+};
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && !["TEXTAREA", "INPUT"].includes(document.activeElement.tagName)) {
+    e.preventDefault(); timerId ? stop() : start();
+  }
+});
+draw();
+
+/* ---------- 모둠 편성 ---------- */
+function getNames() {
+  const raw = document.getElementById("names").value.split("\n").map(s => s.trim()).filter(Boolean);
+  return raw.length ? raw : Array.from({ length: 30 }, (_, i) => `${i + 1}번`);
+}
+function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+document.getElementById("make").onclick = () => {
+  const n = Math.max(2, +document.getElementById("gcount").value || 6);
+  const groups = Array.from({ length: n }, () => []);
+  shuffle(getNames()).forEach((name, i) => groups[i % n].push(name));
+  document.getElementById("group-out").innerHTML = groups.map((g, i) =>
+    `<div class="group"><h4>${i + 1}모둠 <span class="muted small">(${g.length}명)</span></h4><ul>${g.map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("");
+};
+
+/* ---------- 뽑기 ---------- */
+let used = new Set();
+function pool() {
+  const raw = document.getElementById("names").value.split("\n").map(s => s.trim()).filter(Boolean);
+  return raw.length ? raw : Array.from({ length: 6 }, (_, i) => `${i + 1}모둠`);
+}
+document.getElementById("pick").onclick = () => {
+  const rest = pool().filter(x => !used.has(x));
+  const out = document.getElementById("picked");
+  if (!rest.length) { out.textContent = "모두 뽑았어요!"; return; }
+  let k = 0;
+  const spin = setInterval(() => {
+    out.textContent = rest[Math.floor(Math.random() * rest.length)];
+    if (++k > 14) {
+      clearInterval(spin);
+      const final = rest[Math.floor(Math.random() * rest.length)];
+      used.add(final); out.textContent = final;
+    }
+  }, 60);
+};
+document.getElementById("pick-reset").onclick = () => { used.clear(); document.getElementById("picked").textContent = "?"; };
+</script>
+</body>
+</html>

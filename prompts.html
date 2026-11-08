@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 프롬프트 | 정보 수업 나눔 키트</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232f5bea'/><text x='50' y='68' font-size='56' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'>정</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="container">
+  <section class="hero">
+    <span class="eyebrow">복사해서 바로 쓰기</span>
+    <h1>AI 프롬프트 · 아이디어 카드</h1>
+    <p class="lead">Claude, ChatGPT, Gemini 등 어떤 생성형 AI에서도 쓸 수 있습니다. <b>[대괄호]</b> 부분만 바꿔 쓰세요. 웹앱을 바로 실행해 보려면 각 서비스의 캔버스·아티팩트 기능이 켜진 상태에서 요청하세요.</p>
+    <nav class="toc"><a href="#vibe">바이브 코딩</a><a href="#rehearsal">AI 학생 리허설</a><a href="#remix">리믹스</a><a href="#sheet">활동지 · 루브릭</a><a href="#ideas">아이디어 카드 20</a></nav>
+  </section>
+
+  <div class="callout accent"><p><b>안전 수칙</b>: 학생 이름, 성적, 사진 등 개인정보는 입력하지 않습니다. 학생 수업에 활용할 때는 서비스 이용 연령과 학교 정책을 먼저 확인하세요.</p></div>
+
+  <section id="vibe">
+    <h2>💻 바이브 코딩: 말로 만드는 수업 도구</h2>
+    <div class="grid cols-2">
+      <div class="card prompt">
+        <h3>① 첫 요청 템플릿</h3>
+        <button class="btn small copy-btn" data-copy="p1">복사</button>
+        <pre id="p1">고등학교 [1]학년 정보 수업에서 쓸 웹페이지 하나를 HTML 파일 한 개로 만들어 줘.
+
+- 단원: [알고리즘과 프로그래밍]
+- 목적: 학생들이 [정렬 알고리즘의 비교·교환 과정을 눈으로 확인]하게 하기
+- 기능: [숫자 막대 8개, ‘한 단계’ 버튼, 비교 횟수 표시, 처음부터 버튼]
+- 디자인: 교실 TV에서도 잘 보이게 큰 글씨, 깔끔한 색
+- 조건: 인터넷 연결 없이도 동작, 한국어 안내 문구</pre>
+      </div>
+      <div class="card prompt">
+        <h3>② 고쳐 달라고 할 때</h3>
+        <button class="btn small copy-btn" data-copy="p2">복사</button>
+        <pre id="p2">좋아. 다음을 고쳐 줘.
+1. [버튼이 너무 작아. 두 배로 키워 줘]
+2. [정답이면 초록색, 오답이면 빨간색으로 표시해 줘]
+3. [마지막에 점수와 ‘다시 하기’ 버튼을 보여 줘]
+나머지 기능은 그대로 유지해 줘.</pre>
+      </div>
+      <div class="card prompt">
+        <h3>③ 퀴즈 앱 (오프닝 시연용)</h3>
+        <button class="btn small copy-btn" data-copy="p3">복사</button>
+        <pre id="p3">고등학생용 ‘이진수 ↔ 십진수 변환’ 연습 퀴즈 웹페이지를 HTML 파일 한 개로 만들어 줘.
+10문제를 무작위로 내고, 정답이면 짧은 효과와 함께 다음 문제로 넘어가고, 마지막에 점수와 다시 하기 버튼을 보여 줘. 교실 화면에서 보이게 글씨를 크게 해 줘.</pre>
+      </div>
+      <div class="card prompt">
+        <h3>④ 아이디어가 없을 때</h3>
+        <button class="btn small copy-btn" data-copy="p4">복사</button>
+        <pre id="p4">나는 고등학교 정보 교사야. [데이터] 단원에서 학생들이 직접 조작하며 개념을 이해할 수 있는 웹 기반 수업 도구 아이디어를 5개 추천해 줘.
+각 아이디어마다 이름, 학생이 하는 활동, 수업 시간 10분 안에 쓸 수 있는지를 표로 정리해 줘.</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="rehearsal">
+    <h2>🎭 AI 학생 리허설</h2>
+    <div class="grid cols-2">
+      <div class="card prompt">
+        <h3>처음 배우는 학생</h3>
+        <button class="btn small copy-btn" data-copy="p5">복사</button>
+        <pre id="p5">지금부터 너는 프로그래밍을 처음 배우는 고등학교 1학년 학생이야. 정보 과목에 관심은 있지만 수학을 어려워해.
+아래 활동을 실제로 풀어 보면서, 학생 말투로
+1) 헷갈리는 부분에서 할 법한 질문 3개
+2) 실수하기 쉬운 오개념 2개
+를 말해 줘. 마지막에 선생님에게 ‘이 부분을 이렇게 바꿔 주면 좋겠다’는 제안 1개를 해 줘.
+
+[활동 내용 붙여넣기]</pre>
+      </div>
+      <div class="card prompt">
+        <h3>빨리 끝내는 학생</h3>
+        <button class="btn small copy-btn" data-copy="p6">복사</button>
+        <pre id="p6">지금부터 너는 정보 과목을 잘하고 금방 지루해하는 고등학교 2학년 학생이야.
+아래 활동을 5분 만에 끝냈다고 가정하고, 학생 말투로 “선생님, 다 했는데 뭐 해요?”라고 말한 뒤
+이 학생을 위한 심화 도전 과제 2개를 제안해 줘.
+
+[활동 내용 붙여넣기]</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="remix">
+    <h2>🔁 짝 리믹스</h2>
+    <div class="card prompt">
+      <button class="btn small copy-btn" data-copy="p7">복사</button>
+      <pre id="p7">아래는 동료 정보 선생님이 만든 수업 활동이야. 이것을 [난이도를 낮춘 버전 / 컴퓨터 없이 하는 언플러그드 버전 / 인공지능 단원과 융합한 버전]으로 바꿔 줘.
+원래 활동의 핵심 아이디어는 유지하고, 학생 활동을 3단계로 정리해 줘.
+
+[동료의 활동 내용 붙여넣기]</pre>
+    </div>
+  </section>
+
+  <section id="sheet">
+    <h2>📝 활동지 · 루브릭 (트랙 B)</h2>
+    <div class="grid cols-2">
+      <div class="card prompt">
+        <h3>한 장 활동지 초안</h3>
+        <button class="btn small copy-btn" data-copy="p8">복사</button>
+        <pre id="p8">고등학교 정보 [단원] 수업용 활동지를 A4 한 장 분량으로 만들어 줘.
+- 활동 목표: [ ]
+- 학생 활동 3단계 (각 단계마다 학생이 직접 쓰거나 그리는 칸 포함)
+- 마지막에 스스로 확인하는 체크 질문 2개
+학생이 바로 이해할 수 있는 쉬운 말로 써 줘.</pre>
+      </div>
+      <div class="card prompt">
+        <h3>3단계 루브릭</h3>
+        <button class="btn small copy-btn" data-copy="p9">복사</button>
+        <pre id="p9">아래 활동에 대한 과정중심평가 루브릭을 ‘잘함 / 보통 / 노력 필요’ 3단계 표로 만들어 줘.
+평가 요소는 2~3개로 하고, 각 칸은 학생 행동이 눈에 보이게 구체적으로 써 줘.
+
+[활동 내용 붙여넣기]</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="ideas">
+    <h2>🃏 아이디어 카드 20</h2>
+    <p class="muted">아이디어가 떠오르지 않을 때 하나를 골라 “우리 학교 버전”으로 바꿔 보세요. 2022 개정 교육과정 정보 과목의 다섯 영역 기준입니다.</p>
+    <div class="grid cols-3" id="idea-grid"></div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script>
+const IDEAS = {
+  "💻 컴퓨팅 시스템": [
+    ["논리 게이트 시뮬레이터", "AND·OR·NOT 스위치를 눌러 출력 전구가 켜지는지 확인"],
+    ["운영체제 스케줄링 체험", "작업 막대를 FCFS·라운드로빈으로 처리하며 대기 시간 비교"],
+    ["피지컬 컴퓨팅 미션 카드", "센서-판단-동작을 카드로 조합해 IoT 시나리오 설계"],
+    ["이진수 변환 스피드 퀴즈", "10문제 타임어택, 모둠 대항전"],
+  ],
+  "📊 데이터": [
+    ["우리 반 데이터 대시보드", "설문을 입력하면 막대·원 그래프가 바로 그려지는 도구"],
+    ["압축 원리 체험기", "같은 문자 반복을 줄이는 런 렝스 인코딩 직접 해 보기"],
+    ["가짜 그래프 탐정", "축을 조작한 그래프를 찾아내는 데이터 리터러시 활동"],
+    ["급식 메뉴 데이터 분석", "학교 급식 공공데이터로 선호 메뉴 찾기"],
+  ],
+  "🧩 알고리즘과 프로그래밍": [
+    ["정렬 알고리즘 시각화", "버블·선택 정렬을 한 단계씩 실행하며 비교 횟수 세기"],
+    ["이진 탐색 숫자 맞히기", "AI와 대결: 최소 몇 번 만에 맞힐 수 있을까?"],
+    ["미로 탈출 순서도", "순서도 블록을 배치해 캐릭터를 출구로 이동"],
+    ["파이썬 텍스트 어드벤처", "조건문과 반복문으로 선택형 스토리 게임 만들기"],
+  ],
+  "🤖 인공지능": [
+    ["나만의 분류 모델 만들기", "이미지·소리 학습 도구로 분류 모델을 만들고 정확도 비교"],
+    ["편향된 AI 찾기", "학습 데이터를 한쪽으로 치우치게 넣어 결과가 어떻게 바뀌는지 관찰"],
+    ["K-NN 언플러그드", "좌표 위 스티커로 가까운 이웃 k개를 세어 분류하기"],
+    ["프롬프트 디자인 대회", "같은 결과를 얻는 가장 짧고 정확한 프롬프트 겨루기"],
+  ],
+  "🌐 디지털 문화": [
+    ["AI 윤리 딜레마 카드", "‘AI로 만든 과제, 괜찮을까?’ 상황별 손들기 토론"],
+    ["딥페이크 판별 챌린지", "진짜·가짜를 구별하고 판별 근거 정리하기"],
+    ["저작권 신호등", "이미지·음원 사용 사례를 초록·노랑·빨강으로 분류"],
+    ["디지털 발자국 지도", "하루 동안 남긴 디지털 흔적을 지도로 그리고 보호 방법 찾기"],
+  ],
+};
+document.getElementById("idea-grid").innerHTML = Object.entries(IDEAS).flatMap(([unit, list]) =>
+  list.map(([t, d]) => `<div class="card"><span class="tag brand">${unit}</span><h3 style="margin-top:8px">${t}</h3><p class="muted small">${d}</p></div>`)
+).join("");
+</script>
+</body>
+</html>
